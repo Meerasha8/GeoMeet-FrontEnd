@@ -86,6 +86,7 @@
   </div>
 
   <script>
+    // ✅ Replace this with your actual Render backend link
     const BACKEND = "https://geomeet-backend.onrender.com";
 
     // Create room
@@ -97,7 +98,7 @@
       const password = document.getElementById("roomPassword").value;
 
       try {
-        const res = await fetch(`${BACKEND}/rooms/create`, {
+        const res = await fetch(`${BACKEND}/create-room`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ displayName, roomName, password })
@@ -108,7 +109,7 @@
           alert("Room created! Share this link:\n" +
             window.location.origin + "/?roomId=" + data.roomId);
         } else {
-          alert("Error creating room");
+          alert("Error creating room: " + (data.message || "unknown error"));
         }
       } catch (err) {
         console.error(err);
@@ -124,7 +125,7 @@
       const password = document.getElementById("joinPassword").value;
 
       try {
-        const res = await fetch(`${BACKEND}/rooms/join`, {
+        const res = await fetch(`${BACKEND}/join-room`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ roomId, password })
@@ -133,7 +134,7 @@
 
         if (data.success) {
           alert("Joined room successfully!");
-          // Here you can redirect to a "room.html?roomId=..."
+          // TODO: redirect to a "room.html?roomId=..." if you build that page
         } else {
           alert("Failed to join: " + data.message);
         }
