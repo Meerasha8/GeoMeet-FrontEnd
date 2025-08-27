@@ -81,7 +81,7 @@
       Notes: This frontend polls the server for room member locations every 3s.  
       Limit enforced: 2–5 participants.  
       When you click "Find Venues" the client collects current members’ locations  
-      and calls your backend `/api/venues`.
+      and calls your backend `/search_venues`.
     </div>
   </div>
 
@@ -98,7 +98,7 @@
       const password = document.getElementById("roomPassword").value;
 
       try {
-        const res = await fetch(`${BACKEND}/create-room`, {
+        const res = await fetch(`${BACKEND}/create_room`, {   // ✅ fixed
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ displayName, roomName, password })
@@ -125,16 +125,16 @@
       const password = document.getElementById("joinPassword").value;
 
       try {
-        const res = await fetch(`${BACKEND}/join-room`, {
+        const res = await fetch(`${BACKEND}/join_room`, {   // ✅ fixed
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ roomId, password })
         });
         const data = await res.json();
 
-        if (data.success) {
+        if (data.status === "joined") {   // ✅ matches backend test response
           alert("Joined room successfully!");
-          // TODO: redirect to a "room.html?roomId=..." if you build that page
+          // TODO: redirect to "room.html?roomId=..." if you build that page
         } else {
           alert("Failed to join: " + data.message);
         }
